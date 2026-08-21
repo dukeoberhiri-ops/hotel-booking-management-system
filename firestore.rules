@@ -1,0 +1,129 @@
+rules_version = '2';
+
+/**
+ * FIRESTORE SECURITY RULES — Aurelio Hotels
+ * Paste this entire file into Firebase Console → Firestore Database → Rules.
+ *
+ * Collections:
+ *   users/{uid}           profile + role ("admin" | "customer")
+ *   rooms/{roomId}         public catalog, admin-managed
+ *   bookings/{bookingId}    guest-created (or staff-created), status-managed by guest + admin
+ *   messages/{messageId}    a flat, real two-way conversation log — every message (guest or staff) is its own document sharing the guest's userId
+ *
+ * DEMO NOTE: the one exception baked into these rules is that the fixed
+ * email admin@example.com is allowed to self-provision as role "admin" the
+ * very first time it signs up (see the users/create rule below). This only
+ * ever applies to that exact address — every other new account is always
+ * forced into role "customer". This exists purely so the demo admin account
+ * can be created client-side without a Cloud Function; remove that clause
+ * if you don't want a standing demo admin in production.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ---------- Helpers ---------- */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    function isDemoAdminEmail() {
+      return isSignedIn() && request.auth.token.email == 'admin@example.com';
+    }
+
+    /* ---------- users/{uid} ---------- */
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      // Anyone signing up may create their own profile as "customer". The
+      // single exception is the fixed demo admin address, which may
+      // self-provision as "admin" — see DEMO NOTE above.
+      allow create: if isOwner(uid) &&
+        request.resource.data.email is string &&
+        (
+          request.resource.data.role == 'customer' ||
+          (request.resource.data.role == 'admin' && isDemoAdminEmail())
+        );
+
+      // Owners can update their own profile but can never change their own
+      // role or status. Admins may update any user (e.g. to suspend, or to
+      // promote a customer to admin from the console/back office).
+      allow update: if isAdmin() ||
+        (isOwner(uid) &&
+          request.resource.data.role == resource.data.role &&
+          request.resource.data.status == resource.data.status);
+
+      allow delete: if isAdmin();
+    }
+
+    /* ---------- rooms/{roomId} ---------- */
+    match /rooms/{roomId} {
+      // Room catalog is public so visitors can browse without an account.
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    /* ---------- bookings/{bookingId} ---------- */
+    match /bookings/{bookingId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      // A guest may create a booking only for themselves, and it must start
+      // out "pending". Admins may additionally create a booking on behalf
+      // of any guest (e.g. a phone reservation, or seeding demo data) and
+      // may set it directly to "confirmed".
+      allow create: if request.resource.data.checkIn is string &&
+        request.resource.data.checkOut is string &&
+        request.resource.data.checkOut > request.resource.data.checkIn &&
+        (
+          (isSignedIn() && request.resource.data.userId == request.auth.uid && request.resource.data.status == 'pending') ||
+          (isAdmin() && request.resource.data.status in ['pending', 'confirmed'])
+        );
+
+      // Admin can update anything (approve, cancel, complete). A guest may
+      // only cancel their own pending/confirmed booking — no other field
+      // may change on a guest-initiated update.
+      allow update: if isAdmin() ||
+        (isSignedIn() &&
+          resource.data.userId == request.auth.uid &&
+          resource.data.status in ['pending', 'confirmed'] &&
+          request.resource.data.status == 'cancelled' &&
+          request.resource.data.roomId == resource.data.roomId &&
+          request.resource.data.checkIn == resource.data.checkIn &&
+          request.resource.data.checkOut == resource.data.checkOut &&
+          request.resource.data.totalPrice == resource.data.totalPrice);
+
+      allow delete: if isAdmin();
+    }
+
+    /* ---------- messages/{messageId} ---------- */
+    match /messages/{messageId} {
+      // "This conversation" = every message sharing the same userId (the
+      // guest's uid) — so a guest reads/writes only their own thread,
+      // while an admin can read every thread and reply to any of them.
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      // A guest may add a message to their own conversation (userId must
+      // equal their own uid). An admin may add a reply to ANY guest's
+      // conversation — note the message's userId stays the GUEST's id even
+      // when an admin writes it, since userId identifies whose thread this
+      // is, not who sent this particular message (that's senderRole).
+      allow create: if request.resource.data.message is string &&
+        (
+          (isSignedIn() && request.resource.data.userId == request.auth.uid) ||
+          isAdmin()
+        );
+
+      // Messages are an append-only log — nobody edits a sent message.
+      // Update/delete stay admin-only for moderation purposes, though the
+      // app itself never calls either.
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

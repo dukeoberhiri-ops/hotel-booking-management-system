@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rooms & Suites | Aurelio Hotels</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%231F3D2C%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%23D9AE73%22 text-anchor=%22middle%22 font-family=%22Georgia%22>A</text></svg>">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/public.css">
+</head>
+<body>
+
+<div class="page-loader"><div class="brand-mark">A</div></div>
+
+<nav class="navbar is-scrolled">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark">A</span> Aurelio</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html" class="active">Rooms & Suites</a></li>
+      <li><a href="index.html#amenities">Amenities</a></li>
+      <li><a href="index.html#gallery">Gallery</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div id="navAuthArea" class="flex gap-2 items-center">
+        <a href="login.html" class="btn btn-ghost">Log in</a>
+        <a href="register.html" class="btn btn-primary">Book now</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>Rooms &amp; Suites</span></div>
+    <h1>Rooms &amp; Suites</h1>
+    <p>Nine room categories, transparent nightly rates, and live availability — filter to find your fit.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top: var(--space-6);">
+  <div class="container">
+    <div class="filter-bar">
+      <div class="input-icon-wrap" style="flex:1; min-width:220px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="roomSearchInput" class="input" placeholder="Search by room type, number, or description…">
+      </div>
+      <select id="guestFilter" class="input">
+        <option value="any">Any guests</option>
+        <option value="1">1+ guest</option>
+        <option value="2">2+ guests</option>
+        <option value="4">4+ guests</option>
+        <option value="6">6+ guests</option>
+      </select>
+      <select id="sortSelect" class="input">
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+        <option value="guests">Most guests</option>
+      </select>
+    </div>
+    <div class="filter-bar" style="border-bottom:none; padding-top:0;">
+      <div class="filter-pill-group" id="typeFilterPills"></div>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+
+    <div class="room-grid" id="roomsGrid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Aurelio Hotels. All rights reserved.</span>
+      <span>Built as a portfolio demonstration project.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+  auth.onAuthStateChanged(() => hideAppLoader());
+  setTimeout(hideAppLoader, 1200);
+</script>
+</body>
+</html>

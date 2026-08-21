@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelio Hotels — Quiet Luxury, Warm Welcome</title>
+<meta name="description" content="Book beautifully designed rooms and suites at Aurelio Hotels. Real-time availability, instant confirmation, no hassle.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%231F3D2C%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%23D9AE73%22 text-anchor=%22middle%22 font-family=%22Georgia%22>A</text></svg>">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/public.css">
+</head>
+<body>
+
+<div class="page-loader"><div class="brand-mark">A</div></div>
+
+<!-- ============================== NAVBAR ============================== -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark">A</span> Aurelio</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="rooms.html">Rooms & Suites</a></li>
+      <li><a href="index.html#amenities">Amenities</a></li>
+      <li><a href="index.html#gallery">Gallery</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div id="navAuthArea" class="flex gap-2 items-center">
+        <a href="login.html" class="btn btn-ghost">Log in</a>
+        <a href="register.html" class="btn btn-primary">Book now</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================== HERO ============================== -->
+<header class="hero">
+  <div class="container">
+    <div>
+      <span class="eyebrow hero-eyebrow">Aurelio Hotels &amp; Residences</span>
+      <h1>A stay that feels like <em>coming home</em>, wherever home is.</h1>
+      <p class="lead">Nine curated room types, transparent nightly pricing, and instant online booking — no phone calls, no waiting on hold.</p>
+      <div class="hero-actions">
+        <a href="rooms.html" class="btn btn-brass btn-lg">Browse rooms</a>
+        <a href="#amenities" class="btn btn-outline-light btn-lg">Explore amenities</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>4.9</b><span>Guest rating</span></div>
+        <div><b>9</b><span>Room categories</span></div>
+        <div><b>24/7</b><span>Front desk</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-collage">
+        <img class="ph-1" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=900&q=80" alt="Aurelio deluxe suite bedroom">
+        <img class="ph-2" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=700&q=80" alt="Aurelio bathroom detail">
+        <div class="hero-keycard">
+          <div class="stripe"></div>
+          <div class="kc-row"><span>ROOM</span><span>310</span></div>
+          <div class="kc-row"><span>GUEST</span><span>A. MORENO</span></div>
+          <b>Executive Suite</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== SEARCH BAR ============================== -->
+<div class="container">
+  <form class="search-bar card" id="heroSearchForm" action="rooms.html" method="get">
+    <div class="field">
+      <label for="heroCheckIn">Check-in</label>
+      <input type="date" id="heroCheckIn" name="checkin" class="input">
+    </div>
+    <div class="field">
+      <label for="heroCheckOut">Check-out</label>
+      <input type="date" id="heroCheckOut" name="checkout" class="input">
+    </div>
+    <div class="field">
+      <label for="heroGuests">Guests</label>
+      <select id="heroGuests" name="guests" class="input">
+        <option value="any">Any</option>
+        <option value="1">1 guest</option>
+        <option value="2" selected>2 guests</option>
+        <option value="3">3 guests</option>
+        <option value="4">4+ guests</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      Search rooms
+    </button>
+  </form>
+</div>
+
+<!-- ============================== TRUST STRIP ============================== -->
+<section class="trust-strip">
+  <div class="container">
+    <ul>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Instant confirmation</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg> No hidden fees</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg> Free cancellation window</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 24/7 guest support</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================== FEATURED ROOMS ============================== -->
+<section class="section" id="rooms">
+  <div class="container">
+    <div class="section-head flex justify-between items-center" style="max-width:none;">
+      <div>
+        <span class="eyebrow">Featured rooms</span>
+        <h2 class="mt-2">Find the stay that fits</h2>
+        <p>A snapshot of our most-booked rooms this month.</p>
+      </div>
+      <a href="rooms.html" class="btn btn-outline">View all rooms</a>
+    </div>
+    <div class="room-grid" id="featuredRoomsGrid"></div>
+  </div>
+</section>
+
+<!-- ============================== AMENITIES ============================== -->
+<section class="section" id="amenities">
+  <div class="container">
+    <div class="amenities-band">
+      <div class="amenity-item">
+        <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+        <h4>Rooftop pool & lounge</h4>
+        <p>Open sunrise to midnight with skyline views.</p>
+      </div>
+      <div class="amenity-item">
+        <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg></div>
+        <h4>In-room dining</h4>
+        <p>Chef-prepared meals delivered around the clock.</p>
+      </div>
+      <div class="amenity-item">
+        <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h4>Fitness studio</h4>
+        <p>Full equipment, open 24 hours for guests.</p>
+      </div>
+      <div class="amenity-item">
+        <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div>
+        <h4>Complimentary valet</h4>
+        <p>Self and valet parking available on arrival.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== GALLERY ============================== -->
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">A closer look</span>
+      <h2 class="mt-2">Around the property</h2>
+    </div>
+    <div class="gallery-grid">
+      <img class="g-tall" src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=700&q=80" alt="Hotel lobby lounge">
+      <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=700&q=80" alt="Suite bathroom">
+      <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80" alt="Twin room">
+      <img class="g-tall" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=700&q=80" alt="Deluxe king bedroom">
+      <img src="https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=700&q=80" alt="Penthouse terrace">
+      <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=700&q=80" alt="Executive suite living room">
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TESTIMONIALS ============================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head text-center" style="max-width:560px; margin-left:auto; margin-right:auto;">
+      <span class="eyebrow" style="justify-content:center;">Guest stories</span>
+      <h2 class="mt-2">What guests are saying</h2>
+    </div>
+    <div class="testimonial-grid">
+      <div class="card testimonial-card">
+        <div class="card-stripe"></div>
+        <div style="padding: var(--space-5) var(--space-5) 0;">
+          <div class="stars">★★★★★</div>
+          <p>"Booking took two minutes and the room matched the photos exactly. The little brass keycard touch at check-in was a nice surprise."</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Guest portrait">
+            <div><b>Priya Anand</b><span>Executive Suite guest</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card testimonial-card">
+        <div class="card-stripe"></div>
+        <div style="padding: var(--space-5) var(--space-5) 0;">
+          <div class="stars">★★★★★</div>
+          <p>"Traveled with three kids and the Family Room bunk nook was a genuine lifesaver. Staff were warm without being intrusive."</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&q=80" alt="Guest portrait">
+            <div><b>Marcus Ferreira</b><span>Family Room guest</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card testimonial-card">
+        <div class="card-stripe"></div>
+        <div style="padding: var(--space-5) var(--space-5) 0;">
+          <div class="stars">★★★★★</div>
+          <p>"The penthouse plunge pool at sunset is worth the stay on its own. I'll be back every time I'm in town."</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Guest portrait">
+            <div><b>Elena Kovacs</b><span>Penthouse guest</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CTA ============================== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="cta-band">
+      <h2>Your room is one search away</h2>
+      <p>Real-time availability, transparent pricing, and a confirmation you can track from your phone.</p>
+      <div class="btn-group">
+        <a href="rooms.html" class="btn btn-brass btn-lg">Browse rooms</a>
+        <a href="register.html" class="btn btn-outline-light btn-lg">Create an account</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand" style="color:#fff;"><span class="brand-mark">A</span> Aurelio</div>
+        <p>Quiet luxury hospitality, booked the modern way. One property, nine room styles, zero hassle.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="rooms.html">Rooms & Suites</a>
+        <a href="index.html#amenities">Amenities</a>
+        <a href="index.html#gallery">Gallery</a>
+      </div>
+      <div>
+        <h4>Account</h4>
+        <a href="login.html">Log in</a>
+        <a href="register.html">Register</a>
+        <a href="account.html">My bookings</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>21 Harborview Avenue<br>Miami, FL 33101</p>
+        <p>front.desk@aurelio-hotels.example</p>
+        <p>+1 (305) 555-0148</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Aurelio Hotels. All rights reserved.</span>
+      <span>Built as a portfolio demonstration project.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================== SCRIPTS ============================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ci = qs("#heroCheckIn"), co = qs("#heroCheckOut");
+    if (ci) ci.min = todayISO();
+    if (co) co.min = addDaysISO(todayISO(), 1);
+    ci?.addEventListener("change", () => { co.min = addDaysISO(ci.value, 1); });
+  });
+  auth.onAuthStateChanged(() => hideAppLoader());
+  setTimeout(hideAppLoader, 1200);
+</script>
+</body>
+</html>

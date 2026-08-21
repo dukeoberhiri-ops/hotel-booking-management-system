@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Details | Aurelio Hotels</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%231F3D2C%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%23D9AE73%22 text-anchor=%22middle%22 font-family=%22Georgia%22>A</text></svg>">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/public.css">
+</head>
+<body>
+
+<div class="page-loader"><div class="brand-mark">A</div></div>
+
+<nav class="navbar is-scrolled">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark">A</span> Aurelio</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html" class="active">Rooms & Suites</a></li>
+      <li><a href="index.html#amenities">Amenities</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div id="navAuthArea" class="flex gap-2 items-center">
+        <a href="login.html" class="btn btn-ghost">Log in</a>
+        <a href="register.html" class="btn btn-primary">Book now</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="padding-top: calc(var(--nav-h) + 32px);">
+  <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <a href="rooms.html">Rooms</a> <span>/</span> <span id="roomBreadcrumbType">Room</span></div>
+
+  <div id="roomDetailContent">
+    <div class="room-hero-gallery">
+      <div class="rhg-main"><img id="rhgMain" src="" alt=""></div>
+      <div class="rhg-side" id="rhgSide"></div>
+    </div>
+
+    <div class="room-detail-layout">
+      <div>
+        <div class="room-info-block">
+          <h1 id="roomTitle" style="font-size:28px;">Loading…</h1>
+          <div class="flex gap-2 mt-3" id="roomMeta" style="flex-wrap:wrap;"></div>
+        </div>
+        <div class="room-info-block">
+          <h2>About this room</h2>
+          <p class="text-soft" id="roomDescription"></p>
+        </div>
+        <div class="room-info-block">
+          <h2>Amenities</h2>
+          <ul class="amenity-list" id="roomAmenityList"></ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="card booking-panel">
+          <div class="card-stripe"></div>
+          <div style="padding-top: var(--space-4);">
+            <div class="price-row" id="panelPrice"></div>
+            <form id="bookingForm">
+              <div class="input-group-2">
+                <div class="field">
+                  <label for="checkInInput">Check-in</label>
+                  <input type="date" id="checkInInput" class="input" required>
+                </div>
+                <div class="field">
+                  <label for="checkOutInput">Check-out</label>
+                  <input type="date" id="checkOutInput" class="input" required>
+                </div>
+              </div>
+              <div class="field">
+                <label for="guestsInput">Guests</label>
+                <select id="guestsInput" class="input">
+                  <option value="1">1 guest</option>
+                  <option value="2" selected>2 guests</option>
+                  <option value="3">3 guests</option>
+                  <option value="4">4 guests</option>
+                  <option value="5">5 guests</option>
+                  <option value="6">6 guests</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="specialRequests">Special requests <span class="text-faint">(optional)</span></label>
+                <textarea id="specialRequests" class="input" rows="2" placeholder="Late check-in, high floor, allergies…"></textarea>
+              </div>
+              <div id="availNote" class="hidden"></div>
+              <div id="priceBreakdown" class="price-breakdown hidden"></div>
+              <button type="submit" class="btn btn-primary btn-block mt-4" id="bookNowBtn">Request to book</button>
+              <p class="text-faint mt-3" style="font-size:12px; text-align:center;">You won't be charged yet. Bookings require front-desk confirmation.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer mt-6">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Aurelio Hotels. All rights reserved.</span>
+      <span>Built as a portfolio demonstration project.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Booking confirmation modal -->
+<div class="modal-overlay" id="confirmModalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Booking confirmation</h3>
+      <button class="modal-close" id="confirmModalClose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="confirmModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="confirmModalClose2" onclick="document.getElementById('confirmModalOverlay').classList.remove('open')">Keep browsing</button>
+      <button class="btn btn-primary" id="confirmModalGoBookings">View my bookings</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/room-detail.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>

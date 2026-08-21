@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Account Setup | Aurelio Hotels</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%231F3D2C%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%23D9AE73%22 text-anchor=%22middle%22 font-family=%22Georgia%22>A</text></svg>">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80" alt="Aurelio suite interior">
+    <div class="overlay">
+      <a href="index.html" class="brand"><span class="brand-mark">A</span> Aurelio</a>
+      <blockquote>One-time setup — creates the two permanent demo accounts used by the "Login as Demo Admin / Demo User" buttons.<cite>Run this once per Firebase project</cite></blockquote>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-wrap">
+      <a href="index.html" class="brand"><span class="brand-mark">A</span> Aurelio</a>
+      <span class="badge badge-pending mb-3">Site owner setup — not the demo itself</span>
+      <h1>Demo account setup</h1>
+      <p class="sub">This page is for <b>you</b> (or your client's IT contact), run once per Firebase project. It creates two permanent accounts so anyone can explore the app instantly, without registering:</p>
+
+      <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-5);">
+        <div class="flex justify-between items-center mb-3">
+          <div><b style="font-size:14px;">Demo Admin</b><br><span class="text-faint" style="font-size:12.5px; font-family:var(--font-mono);">admin@example.com</span></div>
+          <span class="badge badge-confirmed" id="adminStatusBadge">Not created</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div><b style="font-size:14px;">Demo User</b><br><span class="text-faint" style="font-size:12.5px; font-family:var(--font-mono);">user@example.com</span></div>
+          <span class="badge badge-confirmed" id="userStatusBadge">Not created</span>
+        </div>
+      </div>
+
+      <div class="form-alert hidden" id="setupAlert"></div>
+
+      <button class="btn btn-primary btn-block btn-lg" id="setupBtn">Create demo accounts</button>
+      <p class="text-faint mt-3" style="font-size:12.5px; text-align:center;">Safe to run more than once — existing accounts are detected and skipped.</p>
+
+      <div class="hidden mt-5" id="nextStepBox">
+        <div class="auth-divider">Next step</div>
+        <p class="text-soft mb-4" style="font-size:13.5px;">Log in as Demo Admin and seed the demo with realistic rooms, bookings, and messages — one click, and the dashboard immediately reads like a real, active hotel instead of an empty database.</p>
+        <a href="login.html" class="btn btn-brass btn-block">Log in as Demo Admin to seed data →</a>
+      </div>
+
+      <div class="mt-5" style="background: var(--surface-sunk); border-radius: var(--r-md); padding: var(--space-4); font-size: 13px; color: var(--ink-soft);">
+        <b style="color: var(--ink); display:block; margin-bottom:4px;">Sharing this with a client?</b>
+        Send them straight to the <a href="login.html" style="color:var(--primary); font-weight:600;">login page</a> instead of here — it has one-click <b>"Login as Demo Admin"</b> / <b>"Login as Demo Guest"</b> buttons, no credentials or setup required on their end.
+      </div>
+
+      <p class="auth-foot"><a href="login.html">← Back to login</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/utils.js"></script>
+<script>
+/**
+ * Creates each demo account, OR — if the Auth account already exists —
+ * signs into it to check its Firestore profile. Two distinct broken states
+ * are possible here, and only one of them can be self-healed:
+ *
+ *  - Profile document MISSING entirely (e.g. the Auth account was created
+ *    but the follow-up Firestore write failed in an earlier run, before a
+ *    security-rules fix). Firestore treats writing a doc that doesn't yet
+ *    exist as a "create" — which our rules allow for admin@example.com —
+ *    so this case is repaired automatically below.
+ *  - Profile document EXISTS but with the wrong role (e.g. it was created
+ *    as "customer" before this admin exception existed). This can NOT be
+ *    self-healed: the security rules deliberately block a signed-in user
+ *    from changing their own role via update, to prevent privilege
+ *    escalation. That one still needs a manual Firebase Console edit.
+ */
+async function ensureDemoAccount({ email, password, fullName }, role) {
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    await cred.user.updateProfile({ displayName: fullName });
+    await db.collection(COLLECTIONS.USERS).doc(cred.user.uid).set({
+      fullName, email, phone: "", role, status: "active", isDemo: true,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await auth.signOut();
+    return { status: "created", role };
+  } catch (err) {
+    if (err.code !== "auth/email-already-in-use") throw err;
+  }
+
+  // Account already existed — sign in as it to check (and, if possible,
+  // repair) its Firestore profile.
+  let cred;
+  try {
+    cred = await auth.signInWithEmailAndPassword(email, password);
+  } catch (err) {
+    return { status: "exists", role: null, error: err };
+  }
+
+  let snap;
+  try {
+    snap = await db.collection(COLLECTIONS.USERS).doc(cred.user.uid).get();
+  } catch (err) {
+    await auth.signOut().catch(() => {});
+    return { status: "exists", role: null, error: err };
+  }
+
+  if (!snap.exists) {
+    try {
+      await db.collection(COLLECTIONS.USERS).doc(cred.user.uid).set({
+        fullName, email, phone: "", role, status: "active", isDemo: true,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      await auth.signOut();
+      return { status: "repaired", role };
+    } catch (err) {
+      await auth.signOut().catch(() => {});
+      return { status: "exists", role: null, error: err };
+    }
+  }
+
+  const actualRole = snap.data().role;
+  await auth.signOut();
+  return { status: "exists", role: actualRole };
+}
+
+function renderAccountStatus(badgeEl, result, expectedRole) {
+  if (result.status === "created") {
+    badgeEl.textContent = "Created";
+    badgeEl.className = "badge badge-confirmed";
+    return true;
+  }
+  if (result.status === "repaired") {
+    badgeEl.textContent = "✓ Fixed — profile was missing, now created";
+    badgeEl.className = "badge badge-confirmed";
+    return true;
+  }
+  if (result.role === expectedRole) {
+    badgeEl.textContent = "Already set up correctly";
+    badgeEl.className = "badge badge-confirmed";
+    return true;
+  }
+  // Exists, but the Firestore role doesn't match what it should be — this
+  // is exactly the state that causes "demo admin lands on the guest page."
+  badgeEl.textContent = result.role ? `⚠ role is "${result.role}", expected "${expectedRole}"` : "⚠ Firestore profile missing";
+  badgeEl.className = "badge badge-cancelled";
+  return false;
+}
+
+qs("#setupBtn").addEventListener("click", async () => {
+  const btn = qs("#setupBtn");
+  const alertBox = qs("#setupAlert");
+  alertBox.classList.add("hidden");
+  setButtonLoading(btn, true, "Setting up…");
+
+  try {
+    const adminResult = await ensureDemoAccount(DEMO_ACCOUNTS.ADMIN, ROLES.ADMIN);
+    const adminOk = renderAccountStatus(qs("#adminStatusBadge"), adminResult, ROLES.ADMIN);
+
+    const userResult = await ensureDemoAccount(DEMO_ACCOUNTS.USER, ROLES.CUSTOMER);
+    const userOk = renderAccountStatus(qs("#userStatusBadge"), userResult, ROLES.CUSTOMER);
+
+    if (adminOk && userOk) {
+      showToast("Demo accounts ready", "Both accounts can now be used with the one-click login buttons.", "success");
+      qs("#nextStepBox").classList.remove("hidden");
+    } else {
+      alertBox.innerHTML = `One or both demo accounts already exist with the <b>wrong role in Firestore</b> — this can't be fixed by re-running this button, since the security rules deliberately block a user from changing their own role. Fix it manually: Firebase Console → Firestore Database → <code>users</code> collection → find the document by its <code>email</code> field → edit the <code>role</code> field to the value shown above (in quotes).`;
+      alertBox.classList.remove("hidden");
+    }
+  } catch (err) {
+    console.error(err);
+    alertBox.textContent = friendlyAuthError(err);
+    alertBox.classList.remove("hidden");
+  } finally {
+    setButtonLoading(btn, false);
+  }
+});
+</script>
+</body>
+</html>
