@@ -1,0 +1,26 @@
+.auth-shell{ min-height: 100vh; display:grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px){ .auth-shell{ grid-template-columns: 1fr; } }
+
+.auth-visual{ position: relative; background: var(--primary-dark); overflow:hidden; }
+.auth-visual img{ width:100%; height:100%; object-fit: cover; opacity: 0.55; }
+.auth-visual .overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(20,42,30,0.3), rgba(20,42,30,0.92)); display:flex; flex-direction:column; justify-content:space-between; padding: var(--space-7); }
+.auth-visual .brand{ color:#fff; }
+.auth-visual blockquote{ color:#fff; font-family: var(--font-display); font-size: 24px; line-height:1.4; max-width: 420px; }
+.auth-visual cite{ display:block; margin-top: var(--space-3); font-style:normal; font-size: 13px; color: rgba(255,255,255,0.6); }
+@media (max-width: 900px){ .auth-visual{ display:none; } }
+
+.auth-form-side{ display:flex; align-items:center; justify-content:center; padding: var(--space-6); }
+.auth-form-wrap{ width: 100%; max-width: 400px; }
+.auth-form-wrap > .brand{ margin-bottom: var(--space-6); display:none; }
+@media (max-width: 900px){ .auth-form-wrap > .brand{ display:flex; } }
+.auth-form-wrap h1{ font-size: 28px; margin-bottom: var(--space-2); }
+.auth-form-wrap .sub{ color: var(--ink-soft); margin-bottom: var(--space-6); font-size: 14.5px; }
+.auth-divider{ display:flex; align-items:center; gap: 12px; margin: var(--space-5) 0; color: var(--ink-faint); font-size: 12.5px; }
+.auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background: var(--border); }
+.auth-foot{ text-align:center; margin-top: var(--space-6); font-size: 14px; color: var(--ink-soft); }
+.auth-foot a{ color: var(--primary); font-weight: 600; }
+.auth-foot a:hover{ text-decoration: underline; }
+.password-strength{ display:flex; gap: 4px; margin-top: 6px; }
+.password-strength span{ flex:1; height: 3px; border-radius: 2px; background: var(--border); transition: background .2s ease; }
+.form-alert{ display:flex; gap: 10px; align-items:flex-start; padding: 12px 14px; border-radius: var(--r-sm); background: var(--wine-tint); color: var(--wine); font-size: 13.5px; margin-bottom: var(--space-4); }
+.form-alert.hidden{ display:none; }
